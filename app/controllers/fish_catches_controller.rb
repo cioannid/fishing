@@ -45,8 +45,15 @@ class FishCatchesController < ApplicationController
 
   def destroy
     @fish_catch.destroy
+    respond_to do |format|
+      format.turbo_stream do
+        @fish_catches = fish_catches_for_bait(@fish_catch.bait)
+      end
 
-    redirect_to tackle_box_item_for_catch(@fish_catch)
+      format.html do
+        redirect_to tackle_box_item_for_catch(@fish_catch)
+      end
+    end
   end
 
 private
